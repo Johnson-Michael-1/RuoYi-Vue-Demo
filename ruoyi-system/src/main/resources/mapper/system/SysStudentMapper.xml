@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysStudentMapper">
+    <resultMap type="com.ruoyi.common.core.domain.entity.SysStudent" id="SysStudentResult">
+        <id property="studentId" column="student_id"/>
+        <result property="studentName"       column="student_name"/>
+        <result property="studentSex"        column="student_sex"/>
+        <result property="studentAge"        column="student_age"/>
+        <result property="studentClassroom"  column="student_classroom"/>
+        <result property="studentNumber"     column="student_number"/>
+        <result property="studentCollege"    column="student_college"/>
+        <result property="studentMajor"      column="student_major"/>
+        <result property="enrollDate"        column="enroll_date"/>
+        <result property="studentPhoto"      column="student_photo"/>
+        <result property="studentHobby"      column="student_hobby"/>
+        <result property="studentStatus"     column="student_status"/>
+    </resultMap>
+
+    <sql id="selectUserVo">
+        select s.student_id, s.student_name, s.student_sex, s.student_age, s.student_classroom, s.student_number, s.student_college, s.student_major, s.enroll_date, s.student_photo, s.student_hobby, s.student_status,
+        from sys_student s
+		    left join sys_dept d on u.dept_id = d.dept_id
+		    left join sys_user_role ur on u.user_id = ur.user_id
+		    left join sys_role r on r.role_id = ur.role_id
+    </sql>
+
+    <select id="selectAllStudents" resultMap="SysStudentResult">
+        select * from sys_student;
+    </select>
+
+    <select id="selectStudentByStudentName" parameterType="string" resultMap="SysStudentResult">
+        select * from sys_student where student_name = #{studenName};
+    </select>
+
+
+
+
+
+
+
+
+</mapper>

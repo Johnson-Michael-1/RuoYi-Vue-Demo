@@ -715,7 +715,7 @@
                 <li>其他细节优化</li>
               </ol>
             </el-collapse-item>
-            <el-collapse-item title="v1.0.0 - 2019-10-08">
+            <el-collapse-item title="v1.0.0 - 2019-10nm08">
               <ol>
                 <li>若依前后端分离系统正式发布</li>
               </ol>
