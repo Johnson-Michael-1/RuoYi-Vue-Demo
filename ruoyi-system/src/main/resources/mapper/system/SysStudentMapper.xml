@@ -18,21 +18,92 @@
         <result property="studentStatus"     column="student_status"/>
     </resultMap>
 
-    <sql id="selectUserVo">
-        select s.student_id, s.student_name, s.student_sex, s.student_age, s.student_classroom, s.student_number, s.student_college, s.student_major, s.enroll_date, s.student_photo, s.student_hobby, s.student_status,
-        from sys_student s
-		    left join sys_dept d on u.dept_id = d.dept_id
-		    left join sys_user_role ur on u.user_id = ur.user_id
-		    left join sys_role r on r.role_id = ur.role_id
+    <sql id="selectStudent">
+        select student_id, student_name, student_sex, student_age, student_classroom, student_number, student_college, student_major, enroll_date, student_photo, student_hobby, student_status,
+        from sys_student ;
     </sql>
 
     <select id="selectAllStudents" resultMap="SysStudentResult">
-        select * from sys_student;
+        <include refid="selectStudent"/> ;
     </select>
 
     <select id="selectStudentByStudentName" parameterType="string" resultMap="SysStudentResult">
         select * from sys_student where student_name = #{studenName};
     </select>
+
+    <select id="selectStudentByStudentNumber" parameterType="long" resultMap="SysStudentResult">
+        <include refid="selectStudent"/>
+        where student_number = #{studentNumber};
+    </select>
+
+    <select id="selectStudentList" parameterType="com.ruoyi.common.core.domain.entity.SysStudent" resultMap="SysStudentResult">
+        <include refid="selectStudent"/>
+        <where>
+            <if test="studentName != null and studentName !=''">
+                and s.student_number = #{studentNumber},
+            </if>
+            <if test="studentName != null and studentName != ''">
+                and student_name like concat('%', #{studentName},'%'),
+            </if>
+            <if test="studentClassroom != null and studentClass !=''" >
+                and student_classroom = #{student_classroom},
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertStudent" parameterType="com.ruoyi.common.core.domain.entity.SysStudent">
+        insert into sys_student(
+            <if test="studentName != null and studentName != ''">student_name,</if>
+            <if test="studentSex != null and studentSex != ''">student_sex,</if>
+            <if test="studentAge != null and studentAge != ''">student_age,</if>
+            <if test="studentClassroom != null and studentClassroom != ''">student_classroom,</if>
+            <if test="studentNumber != null and studentNumber != ''">student_number,</if>
+            <if test="studentCollege != null and studentCollege != ''">student_college,</if>
+            <if test="studentMajor != null and studentMajor != ''">student_major,</if>
+            <if test="enrollDate != null and enrollDate != ''">enroll_date,</if>
+            <if test="studentPhoto != null and studentPhoto != ''">student_photo,</if>
+            <if test="studentHobby != null and studentHobby != ''">student_hobby,</if>
+            <if test="studentStatus != null and studentStatus != ''">student_status,</if>
+        ) values(
+            <if test="studentName != null and studentName != ''">#{studentName},</if>
+            <if test="studentSex != null and studentSex != ''">#{studentSex},</if>
+            <if test="studentAge != null and studentAge != ''">#{student_age},</if>
+            <if test="studentClassroom != null and studentClassroom != ''">#{studentClassroom},</if>
+            <if test="studentNumber != null and studentNumber != ''">#{studentNumber},</if>
+            <if test="studentCollege != null and studentCollege != ''">#{studentCollege},</if>
+            <if test="studentMajor != null and studentMajor != ''">#{studentMajor},</if>
+            <if test="enrollDate != null and enrollDate != ''">#{enrollDate},</if>
+            <if test="studentPhoto != null and studentPhoto != ''">#{studentPhoto},</if>
+            <if test="studentHobby != null and studentHobby != ''">#{studentHobby},</if>
+            <if test="studentStatus != null and studentStatus != ''">#{studentStatus},</if>
+        )
+    </insert>
+
+    <update id="updateStudent" parameterType="com.ruoyi.common.core.domain.entity.SysStudent">
+        update sys_student
+        <set>
+            <if test="studentName != null and studentName != ''">student_name = #{studentName},</if>
+            <if test="studentSex != null and studentSex != ''">student_sex = #{studentSex},</if>
+            <if test="studentAge != null and studentAge != ''">student_age = #{studentAge},</if>
+            <if test="studentClassroom != null and studentClassroom != ''">student_classroom = #{studentClassroom},</if>
+            <if test="studentNumber != null and studentNumber != ''">student_number = #{studentNumber,</if>
+            <if test="studentCollege != null and studentCollege != ''">student_college = #{studentCollege},</if>
+            <if test="studentMajor != null and studentMajor != ''">student_major = #{studentMajor},</if>
+            <if test="enrollDate != null and enrollDate != ''">enroll_date=#{enrollDate},</if>
+            <if test="studentPhoto != null and studentPhoto != ''">student_photo=#{studentPhoto},</if>
+            <if test="studentHobby != null and studentHobby != ''">student_hobby=#{studentHobby},</if>
+            <if test="studentStatus != null and studentStatus != ''">student_status=#{studentStatus},</if>
+        </set>
+        where student_number = #{studentNumber};
+    </update>
+
+    <delete id="deleteStudentById" parameterType="long">
+        delete from sys_student where student_id = #{student_id};
+    </delete>
+
+
+
+
 
 
 
