@@ -1,4 +1,4 @@
-package com.ruoyi.system.mapper;
+package com.ruoyi.system.service;
 
 import com.ruoyi.common.core.domain.entity.SysStudent;
 
@@ -7,11 +7,11 @@ import java.util.List;
 /**
  * @param
  * @author Johnson Michael
- * @date 2022.8.15 20.04.56
+ * @date 2022 8-16  14:22:43
  * @description TODO
  * @return
  */
-public interface SysStudentMapper {
+public interface ISysStudentService {
     List<SysStudent> selectAllStudents();
 
     SysStudent selectStudentByStudentId(Long id);
