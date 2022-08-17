@@ -1,24 +1,24 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="岗位编码" prop="postCode">
+      <el-form-item label="学生学号" prop="studentNumber">
         <el-input
-          v-model="queryParams.postCode"
-          placeholder="请输入岗位编码"
+          v-model="queryParams.studentNumber"
+          placeholder="请输入学生学号"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="岗位名称" prop="postName">
+      <el-form-item label="学生姓名" prop="studentName">
         <el-input
-          v-model="queryParams.postName"
-          placeholder="请输入岗位名称"
+          v-model="queryParams.studentName"
+          placeholder="请输入学生姓名"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="状态" prop="status">
-        <el-select v-model="queryParams.status" placeholder="岗位状态" clearable>
+      <el-form-item label="状态" prop="studentStatus">
+        <el-select v-model="queryParams.studentStatus" placeholder="学生状态" clearable>
           <el-option
             v-for="dict in dict.type.sys_normal_disable"
             :key="dict.value"
@@ -41,7 +41,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:post:add']"
+          v-hasPermi="['system:student:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -85,20 +85,20 @@
       <el-table-column label="学生姓名" align="center" prop="studentName" />
       <el-table-column label="性别" align="center" prop="studentSex" />
       <el-table-column label="年龄" align="center" prop="studentAge" />
-      <el-table-column label="班级" align="center" prop="student_classroom" />
-      <el-table-column label="学号" align="center" prop="student_number" />
-      <el-table-column label="学院" align="center" prop="student_college" />
-      <el-table-column label="专业" align="center" prop="student_major" />
-      <el-table-column label="人员图片" align="center" prop="student_photo" />
-      <el-table-column label="入学时间" align="center" prop="createTime" width="180">
+      <el-table-column label="班级" align="center" prop="studentClassroom" />
+      <el-table-column label="学号" align="center" prop="studentNumber" />
+      <el-table-column label="学院" align="center" prop="studentCollege" />
+      <el-table-column label="专业" align="center" prop="studentMajor" />
+      <el-table-column label="人员图片" align="center" prop="studentPhoto" />
+      <el-table-column label="入学时间" align="center" prop="enrollDate" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createTime) }}</span>
+          <span>{{ parseTime(scope.row.enrollDate) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="爱好" align="center" prop="student_hobby" />
-      <el-table-column label="状态" align="center" prop="student_status">
+      <el-table-column label="爱好" align="center" prop="studentHobby" />
+      <el-table-column label="状态" align="center" prop="studentStatus">
         <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
+          <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.studentStatus"/>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -108,14 +108,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:post:edit']"
+            v-hasPermi="['system:student:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:post:remove']"
+            v-hasPermi="['system:student:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -132,26 +132,46 @@
     <!-- 添加或修改岗位对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="岗位名称" prop="postName">
-          <el-input v-model="form.postName" placeholder="请输入岗位名称" />
+        <el-form-item label="学生名称" prop="studentName">
+          <el-input v-model="form.studentName" placeholder="请输入学生名称" />
         </el-form-item>
-        <el-form-item label="岗位编码" prop="postCode">
-          <el-input v-model="form.postCode" placeholder="请输入编码名称" />
+        <el-form-item label="学生性别" prop="studentSex">
+          <el-input v-model="form.studentSex" placeholder="请输入性别" />
         </el-form-item>
-        <el-form-item label="岗位顺序" prop="postSort">
-          <el-input-number v-model="form.postSort" controls-position="right" :min="0" />
+        <el-form-item label="学生年龄" prop="studentAge">
+          <el-input v-model="form.studentAge" placeholder="请输入年龄" />
         </el-form-item>
-        <el-form-item label="岗位状态" prop="status">
-          <el-radio-group v-model="form.status">
+        <el-form-item label="学生班级" prop="studentClassroom">
+          <el-input v-model="form.studentClassroom" placeholder="请输入班级" />
+        </el-form-item>
+        <el-form-item label="学生学号" prop="studentNumber">
+          <el-input v-model="form.studentNumber" placeholder="请输入学号" />
+        </el-form-item>
+        <el-form-item label="学生学院" prop="studentCollege">
+          <el-input v-model="form.studentCollege" placeholder="请输入学院" />
+        </el-form-item>
+        <el-form-item label="学生专业" prop="studentMajor">
+          <el-input v-model="form.studentMajor" placeholder="请输入专业" />
+        </el-form-item>
+        <el-form-item label="入学时间" prop="enrollDate">
+          <el-date-picker type="date" placeholder="选择日期" v-model="form.enrollDate"
+                          value-format="yyyy-MM-dd HH:mm:ss" >
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="人员图片" prop="studentPhoto">
+          <el-input v-model="form.studentPhoto" placeholder="请选择图片" />
+        </el-form-item>
+        <el-form-item label="爱好" prop="studentHobby">
+          <el-input v-model="form.studentHobby" placeholder="请输入爱好" />
+        </el-form-item>
+        <el-form-item label="学生状态" prop="studentStatus">
+          <el-radio-group v-model="form.studentStatus">
             <el-radio
               v-for="dict in dict.type.sys_normal_disable"
               :key="dict.value"
               :label="dict.value"
             >{{dict.label}}</el-radio>
           </el-radio-group>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -163,12 +183,13 @@
 </template>
 
 <script>
-import { listStudent, getStudent, delPost, addPost, updatePost } from "@/api/system/student";
+// import { listStudent, getStudent, delPost, addPost, updatePost } from "@/api/system/student";
+import { listStudent, getStudent, delStudent, addStudent, updateStudent } from "@/api/system/student";
 
 export default {
   name: "Student",
-  dicts: ['sys_student_disable'],
-  data() {
+  dicts: ['sys_normal_disable'],
+  data: function () {
     return {
       // 遮罩层
       loading: true,
@@ -183,7 +204,10 @@ export default {
       // 总条数
       total: 0,
       // 岗位表格数据
-      postList: [],
+      // postList: [],
+
+      studentList: [],
+
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -192,24 +216,24 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        studentNumber: undefined,
-        studentClassroom: undefined,
-        studentName:undefined,
-        studentAge:undefined,
-        status: undefined
+        // studentNumber: undefined,
+        // studentClassroom: undefined,
+        // studentName:undefined,
+        // studentAge:undefined,
+        // status: undefined
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        postName: [
-          { required: true, message: "岗位名称不能为空", trigger: "blur" }
+        studentName: [
+          {required: true, message: "学生名称不能为空", trigger: "blur"}
         ],
-        postCode: [
-          { required: true, message: "岗位编码不能为空", trigger: "blur" }
+        studentSex: [
+          {required: true, message: "学生性别不能为空", trigger: "blur"}
         ],
-        postSort: [
-          { required: true, message: "岗位顺序不能为空", trigger: "blur" }
+        studentAge: [
+          {required: true, message: "学生年龄不能为空", trigger: "blur"}
         ]
       }
     };
@@ -218,10 +242,11 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询岗位列表 */
+    /** 查询学生列表 */
     getList() {
       this.loading = true;
       listStudent(this.queryParams).then(response => {
+        console.log("=====");
         this.studentList = response.rows;
         this.total = response.total;
         this.loading = false;
@@ -235,12 +260,9 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        postId: undefined,
-        postCode: undefined,
-        postName: undefined,
-        postSort: 0,
-        status: "0",
-        remark: undefined
+        studentNumber: undefined,
+        studentName: undefined,
+        studentStatus: undefined,
       };
       this.resetForm("form");
     },
@@ -256,38 +278,39 @@ export default {
     },
     // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.postId)
+      this.ids = selection.map(item => item.studentId)
       this.single = selection.length!=1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      console.log("sdasdasdasdddddddddddddddddddddddddddddddddddd");
       this.open = true;
-      this.title = "添加岗位";
+      this.title = "添加学生";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const postId = row.postId || this.ids
-      getPost(postId).then(response => {
+      const studentId = row.studentId || this.ids
+      getStudent(studentId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改岗位";
+        this.title = "修改学生";
       });
     },
     /** 提交按钮 */
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.postId != undefined) {
-            updatePost(this.form).then(response => {
+          if (this.form.studentName != undefined) {
+            updateStudent(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addPost(this.form).then(response => {
+            addStudent(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -298,9 +321,9 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const postIds = row.postId || this.ids;
-      this.$modal.confirm('是否确认删除岗位编号为"' + postIds + '"的数据项？').then(function() {
-        return delPost(postIds);
+      const ids = row.studentId || this.ids;
+      this.$modal.confirm('是否确认删除学生编号为"' + ids + '"的数据项？').then(function() {
+        return delStudent(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -308,7 +331,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/post/export', {
+      this.download('system/student/export', {
         ...this.queryParams
       }, `post_${new Date().getTime()}.xlsx`)
     }

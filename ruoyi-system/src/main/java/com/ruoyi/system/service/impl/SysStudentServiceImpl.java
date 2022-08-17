@@ -3,6 +3,7 @@ package com.ruoyi.system.service.impl;
 import com.ruoyi.common.core.domain.entity.SysStudent;
 import com.ruoyi.system.mapper.SysStudentMapper;
 import com.ruoyi.system.service.ISysStudentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 @Service
 public class SysStudentServiceImpl implements ISysStudentService {
+   @Autowired
     private SysStudentMapper studentMapper;
 
     @Override
@@ -54,8 +56,8 @@ public class SysStudentServiceImpl implements ISysStudentService {
     }
 
     @Override
-    public Integer deleteStudentById(Long id) {
-        return studentMapper.deleteStudentById(id);
+    public Integer deleteStudentById(Long studentId) {
+        return studentMapper.deleteStudentById(studentId);
     }
 
     @Override

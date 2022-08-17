@@ -14,7 +14,7 @@ import java.util.List;
 public interface SysStudentMapper {
     List<SysStudent> selectAllStudents();
 
-    SysStudent selectStudentByStudentId(Long id);
+    SysStudent selectStudentByStudentId(Long studentId);
 
     SysStudent selectStudentByStudentName(String studentName);
 
@@ -26,7 +26,7 @@ public interface SysStudentMapper {
 
     Integer updateStudent(SysStudent student);
 
-    Integer deleteStudentById(Long id);
+    Integer deleteStudentById(Long studentId);
 
     Integer deleteStudentByIds(Long[] ids);
 }

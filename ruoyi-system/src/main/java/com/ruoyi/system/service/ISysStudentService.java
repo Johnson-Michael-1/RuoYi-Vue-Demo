@@ -26,7 +26,7 @@ public interface ISysStudentService {
 
     Integer updateStudent(SysStudent student);
 
-    Integer deleteStudentById(Long id);
+    Integer deleteStudentById(Long studentId);
 
     Integer deleteStudentByIds(Long[] ids);
 }

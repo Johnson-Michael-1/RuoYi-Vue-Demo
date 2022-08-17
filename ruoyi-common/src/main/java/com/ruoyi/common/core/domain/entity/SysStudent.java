@@ -4,6 +4,7 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -21,10 +22,9 @@ public class SysStudent extends BaseEntity {
 
     private String studentName;
 
-    @Excel(name = "用户性别", readConverterExp = "0=男,1=女,2=未知")
-    private char studentSex;
+    private String  studentSex;
 
-    private int studentAge;
+    private Integer studentAge;
 
     private String studentClassroom;
 
@@ -34,16 +34,14 @@ public class SysStudent extends BaseEntity {
 
     private String studentMajor;
 
-    @Excel(name = "入学时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
+    @Excel(name = "入学时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date enrollDate;
 
-    private Byte studentPhoto;
+    private String studentPhoto;
 
     private String studentHobby;
 
-    @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
-    private char studentStatus;
-
+    private String studentStatus;
 
     @Override
     public String toString() {
@@ -63,6 +61,8 @@ public class SysStudent extends BaseEntity {
                 '}';
     }
 
+
+
     public static long getSerialVesionUID() {
         return serialVersionUID;
     }
@@ -75,23 +75,23 @@ public class SysStudent extends BaseEntity {
         this.studentId = studentId;
     }
 
-    public String getStudnetName() {
+    public String getStudentName() {
         return studentName;
     }
 
-    public void setStudnetName(String studnetName) {
-        this.studentName = studnetName;
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
-    public char getStudentSex() {
+    public String getStudentSex() {
         return studentSex;
     }
 
-    public void setStudentSex(char studentSex) {
+    public void setStudentSex(String studentSex) {
         this.studentSex = studentSex;
     }
 
-    public int getStudentAge() {
+    public Integer getStudentAge() {
         return studentAge;
     }
 
@@ -139,11 +139,11 @@ public class SysStudent extends BaseEntity {
         this.enrollDate = enrollDate;
     }
 
-    public Byte getStudentPhoto() {
+    public String getStudentPhoto() {
         return studentPhoto;
     }
 
-    public void setStudentPhoto(Byte studentPhoto) {
+    public void setStudentPhoto(String studentPhoto) {
         this.studentPhoto = studentPhoto;
     }
 
@@ -155,11 +155,11 @@ public class SysStudent extends BaseEntity {
         this.studentHobby = studentHobby;
     }
 
-    public char getStudentStatus() {
+    public String getStudentStatus() {
         return studentStatus;
     }
 
-    public void setStudentStatus(char studentStatus) {
+    public void setStudentStatus(String studentStatus) {
         this.studentStatus = studentStatus;
     }
 }
