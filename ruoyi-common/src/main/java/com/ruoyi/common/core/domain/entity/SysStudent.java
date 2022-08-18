@@ -1,5 +1,6 @@
 package com.ruoyi.common.core.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -34,6 +35,7 @@ public class SysStudent extends BaseEntity {
 
     private String studentMajor;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "入学时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date enrollDate;
 

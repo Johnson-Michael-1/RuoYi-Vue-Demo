@@ -26,7 +26,7 @@ public class SysStudentController extends BaseController
     private ISysStudentService studentService;
 
     /**
-     * 获取岗位列表
+     * 获取学生列表
      */
 //    @PreAuthorize("@ss.hasPermi('system:student:list')")
     @GetMapping("/list")
@@ -83,27 +83,18 @@ public class SysStudentController extends BaseController
     }
 
     /**
-     * 修改岗位
+     * 修改学生信息
      */
 //    @PreAuthorize("@ss.hasPermi('system:post:edit')")
     @Log(title = "学生管理", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@Validated @RequestBody SysStudent student)
     {
-//        if (UserConstants.NOT_UNIQUE.equals(postService.checkPostNameUnique(post)))
-//        {
-//            return AjaxResult.error("修改岗位'" + post.getPostName() + "'失败，岗位名称已存在");
-//        }
-//        else if (UserConstants.NOT_UNIQUE.equals(postService.checkPostCodeUnique(post)))
-//        {
-//            return AjaxResult.error("修改岗位'" + post.getPostName() + "'失败，岗位编码已存在");
-//        }
-//        post.setUpdateBy(getUsername());
         return toAjax(studentService.updateStudent(student));
     }
 
     /**
-     * 删除岗位
+     * 删除学生信息
      */
 //    @PreAuthorize("@ss.hasPermi('system:post:remove')")
     @Log(title = "学生管理", businessType = BusinessType.DELETE)
@@ -114,7 +105,7 @@ public class SysStudentController extends BaseController
     }
 
     /**
-     * 获取岗位选择框列表
+     * 获取学生选择框列表
      */
     @GetMapping("/optionselect")
     public AjaxResult optionselect()

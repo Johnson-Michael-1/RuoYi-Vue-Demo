@@ -71,7 +71,7 @@
             <if test="studentNumber != null and studentNumber != ''">student_number,</if>
             <if test="studentCollege != null and studentCollege != ''">student_college,</if>
             <if test="studentMajor != null and studentMajor != ''">student_major,</if>
-            <if test="enrollDate != null and enrollDate != ''">enroll_date,</if>
+            <if test="enrollDate != null">enroll_date,</if>
             <if test="studentPhoto != null and studentPhoto != ''">student_photo,</if>
             <if test="studentHobby != null and studentHobby != ''">student_hobby,</if>
             <if test="studentStatus != null and studentStatus != ''">student_status</if>
@@ -83,7 +83,7 @@
             <if test="studentNumber != null and studentNumber != ''">#{studentNumber, jdbcType=VARCHAR},</if>
             <if test="studentCollege != null and studentCollege != ''">#{studentCollege},</if>
             <if test="studentMajor != null and studentMajor != ''">#{studentMajor},</if>
-            <if test="enrollDate != null and enrollDate != ''">#{enrollDate},</if>
+            <if test="enrollDate != null">#{enrollDate},</if>
             <if test="studentPhoto != null and studentPhoto != ''">#{studentPhoto},</if>
             <if test="studentHobby != null and studentHobby != ''">#{studentHobby},</if>
             <if test="studentStatus != null and studentStatus != ''">#{studentStatus}</if>
@@ -100,7 +100,7 @@
             <if test="studentNumber != null and studentNumber != ''">student_number = #{studentNumber},</if>
             <if test="studentCollege != null and studentCollege != ''">student_college = #{studentCollege},</if>
             <if test="studentMajor != null and studentMajor != ''">student_major = #{studentMajor},</if>
-            <if test="enrollDate != null and enrollDate != ''">enroll_date=#{enrollDate},</if>
+            <if test="enrollDate != null">enroll_date=#{enrollDate},</if>
             <if test="studentPhoto != null and studentPhoto != ''">student_photo=#{studentPhoto},</if>
             <if test="studentHobby != null and studentHobby != ''">student_hobby=#{studentHobby},</if>
             <if test="studentStatus != null and studentStatus != ''">student_status=#{studentStatus}</if>

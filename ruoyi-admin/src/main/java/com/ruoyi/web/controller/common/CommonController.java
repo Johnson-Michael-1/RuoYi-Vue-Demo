@@ -1,17 +1,19 @@
 package com.ruoyi.web.controller.common;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.alibaba.fastjson.JSONObject;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.enums.BusinessType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.config.RuoYiConfig;
 import com.ruoyi.common.constant.Constants;
@@ -36,6 +38,46 @@ public class CommonController
     private ServerConfig serverConfig;
 
     private static final String FILE_DELIMETER = ",";
+
+    /**
+     * 缩略图上传,保存图片文件
+     */
+    @Log(title = "上传图片文件", businessType = BusinessType.UPDATE)
+    @PostMapping("/uploadImgFile")
+    public AjaxResult uploadImgFile(MultipartFile file) throws IOException
+    {
+        if (!file.isEmpty())
+        {
+            String articleImg = FileUploadUtils.upload(RuoYiConfig.getUploadPath(), file);
+            if (!StringUtils.isEmpty(articleImg))
+            {
+                AjaxResult ajax = AjaxResult.success();
+                ajax.put("articleImg", articleImg);
+                System.out.println("---------------------------------------"+articleImg);
+                return ajax;
+            }
+        }
+        return AjaxResult.error("上传图片异常，请联系管理员");
+    }
+
+
+    /**
+     * 删除图片文件
+     */
+    @Log(title = "删除图片文件", businessType = BusinessType.DELETE)
+    @PostMapping("/delImgFile")
+    public AjaxResult delImgFile(@RequestBody JSONObject jsonPath)
+    {
+        String path = jsonPath.get("path").toString();
+        if(path.contains("profile")){
+            path = RuoYiConfig.getProfile() + path.substring(path.indexOf("profile")+7);
+            boolean bRet = FileUtils.deleteFile(path);
+            if(bRet){
+                return AjaxResult.success("图片文件删除成功");
+            }
+        }
+        return AjaxResult.error("图片文件删除失败");
+    }
 
     /**
      * 通用下载请求
