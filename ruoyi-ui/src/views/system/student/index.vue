@@ -216,11 +216,9 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        // studentNumber: undefined,
-        // studentClassroom: undefined,
-        // studentName:undefined,
-        // studentAge:undefined,
-        // status: undefined
+        studentNumber: undefined,
+        studentName:undefined,
+        studentStatus: undefined
       },
       // 表单参数
       form: {},
@@ -260,9 +258,18 @@ export default {
     // 表单重置
     reset() {
       this.form = {
-        studentNumber: undefined,
+        studentId:undefined,
         studentName: undefined,
-        studentStatus: undefined,
+        studentSex:undefined,
+        studentAge:undefined,
+        studentClassroom:undefined,
+        studentNumber: undefined,
+        studentCollege:undefined,
+        studentMajor:undefined,
+        enrollDate:"",
+        studentPhoto:"",
+        studentHobby:undefined,
+        studentStatus: "0",
       };
       this.resetForm("form");
     },
@@ -292,7 +299,7 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const studentId = row.studentId || this.ids
+      const studentId = row.studentId || this.ids;
       getStudent(studentId).then(response => {
         this.form = response.data;
         this.open = true;
@@ -303,17 +310,19 @@ export default {
     submitForm: function() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.studentName != undefined) {
+          if (this.form.studentId != undefined) {
             updateStudent(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
+              console.log("updateStudent");
             });
           } else {
             addStudent(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
+              console.log("addStudent");
             });
           }
         }
@@ -321,9 +330,10 @@ export default {
     },
     /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.studentId || this.ids;
-      this.$modal.confirm('是否确认删除学生编号为"' + ids + '"的数据项？').then(function() {
-        return delStudent(ids);
+      const studentIds = row.studentId || this.ids;
+      this.$modal.confirm('是否确认删除学生编号为"' + studentIds + '"的数据项？').then(function() {
+        return delStudent(studentIds);
+        console.log("deleteStudentVue");
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");

@@ -28,5 +28,5 @@ public interface SysStudentMapper {
 
     Integer deleteStudentById(Long studentId);
 
-    Integer deleteStudentByIds(Long[] ids);
+    Integer deleteStudentByIds(Long[] studentIds);
 }

@@ -107,10 +107,10 @@ public class SysStudentController extends BaseController
      */
 //    @PreAuthorize("@ss.hasPermi('system:post:remove')")
     @Log(title = "学生管理", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
+    @DeleteMapping("/{studentIds}")
+    public AjaxResult remove(@PathVariable Long[] studentIds)
     {
-        return toAjax(studentService.deleteStudentByIds(ids));
+        return toAjax(studentService.deleteStudentByIds(studentIds));
     }
 
     /**

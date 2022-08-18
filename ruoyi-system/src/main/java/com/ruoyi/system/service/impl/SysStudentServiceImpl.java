@@ -61,7 +61,7 @@ public class SysStudentServiceImpl implements ISysStudentService {
     }
 
     @Override
-    public Integer deleteStudentByIds(Long[] ids) {
-        return studentMapper.deleteStudentByIds(ids);
+    public Integer deleteStudentByIds(Long[] studentIds) {
+        return studentMapper.deleteStudentByIds(studentIds);
     }
 }
