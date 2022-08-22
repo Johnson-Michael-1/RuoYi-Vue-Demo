@@ -269,14 +269,11 @@
 </template>
 
 <script>
-  import { listStudent, getStudent, delStudent, addStudent, updateStudent } from "@/api/system/student";
+  import { listStudent, getStudent, delStudent, addStudent, updateStudent } from "@/api/system/websocketStudent";
   import { delImgFile, uploadImgFile  } from "@/api/system/common";
   import { getToken } from "@/utils/auth";
-  import log from "@/views/monitor/job/log";
-  let websocket;
 
 export default {
-
   name: "Student",
   dicts: ['sys_normal_disable'],
   data: function () {
@@ -316,13 +313,6 @@ export default {
       imgFile: undefined,
       //允许上传的图片数量
       limit: 1,
-
-      websocket: undefined,
-      message:undefined,
-      id : 1,
-
-
-      studentForm: {},
 
 
       studentList: [],
@@ -371,83 +361,8 @@ export default {
   },
   created() {
     this.getList();
-    this.init();
-    if (window.closed) {
-      this.websocket.close();
-    }
   },
   methods: {
-
-
-    init() {
-      // console.log("===WebSocket");
-      //判断当前浏览器是否支持WebSocket
-      if ('WebSocket' in window) {
-        this.websocket = new WebSocket("ws://192.168.0.35:8089/webSocket/" + this.id);
-        // console.log(this.id+"===id");
-        // this.websocket = new WebSocket("ws://127.0.0.1:16002/android");
-        // console.log("========123213");
-      } else {
-        alert('此浏览器不支持WebSocket')
-      }
-
-      //打开连接
-      this.websocket.onopen =this.onopen;
-      //接收消息
-      this.websocket.onmessage =this.onmessage;
-      //关闭连接
-      this.websocket.onclose =this.close;
-      //发生错误
-      this.websocket.onerror=this.onerror;
-    },
-
-    //连接成功建立的回调方法
-    onopen(){
-      console.log("WebSocket连接成功");
-
-      if(this.websocket.readyState === 1){
-        console.log("+++++++++");
-        this.sendMessage();
-      }
-    },
-
-//接收到消息的回调方法
-    onmessage(event) {
-      console.log("onmessage",event);
-      this.studentList = JSON.parse(event.data);
-      //this.studentList = eval(event.data);
-      console.log(this.studentList)
-      this.loading = false;
-    },
-
-    onerror(e) {
-      console.log("onerror",e);
-    },
-//监听窗口关闭事件，当窗口关闭时关闭websocket连接
-//       window.closed(){
-//         websocket.close();
-//       },
-
-//发送信息
-    sendMessage(){
-      // this.websocket.send("{'action':'register','devSn':'SMBCSS000120220718'}");
-      // this.websocket.send("{'action':'heartbeat'}");
-      // this.websocket.send("{'action':'book_detail_info','body':'[{\"bkRfid\":\"333\"},{\"bkRfid\":\"222\"}]'}");
-      // this.websocket.send("{'action':'upload_BR_record','body':'[{\n" +
-      //   "            \"bkISBN\" : \"1234567\", \n" +
-      //   "            \"bkRfid\" : \"222\",\n" +
-      //   "            \"type\" : \"return\",\n" +
-      //   "            \"time\" : \"2022-07-22 18:31:52\",\n" +
-      //   "            \"rdName\" : \"黄海平\",\n" +
-      //   "            \"rdIdNumber\" : \"331082199999991000\"\n" +
-      //   "        }]'}");
-      this.websocket.send("{\"studentId\":2,\"studentAge\":19,\"studentClassroom\":\"2班\",\"studentMajor\":\"软件\",\"studentNumber\":\"102\",\"studentName\":\"学生2\",\"studentStatus\":\"0\",\"enrollDate\":1661097600000,\"studentCollege\":\"信息工程学院\",\"studentHobby\":\"代码\",\"studentSex\":\"男\",\"toId\":001}");
-    },
-
-    //连接关闭的回调方法
-    close(e){
-      console.log("连接失败",e);
-    },
 
     /** 头像上传 */
     handleAvatarSuccess(res, file) {

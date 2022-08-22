@@ -5,7 +5,11 @@
 </template>
 
 <script>
+
+
 export default  {
+
+
   name:  'App',
     metaInfo() {
         return {
@@ -14,6 +18,8 @@ export default  {
                 return title ? `${title} - ${process.env.VUE_APP_TITLE}` : process.env.VUE_APP_TITLE
             }
         }
-    }
+    },
+
+
 }
 </script>
