@@ -192,7 +192,14 @@
               <el-input v-model="form.studentName" placeholder="请输入学生名称" />
             </el-form-item>
             <el-form-item label="学生性别" prop="studentSex">
-              <el-input v-model="form.studentSex" placeholder="请输入性别" />
+              <el-select v-model="form.sex" placeholder="请选择性别">
+                <el-option
+                  v-for="dict in dict.type.sys_user_sex"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
             </el-form-item>
             <el-form-item label="学生年龄" prop="studentAge">
               <el-input v-model="form.studentAge" placeholder="请输入年龄" />
@@ -275,10 +282,22 @@
   import log from "@/views/monitor/job/log";
   let websocket;
 
+  const util = (() => ({
+    getBase64: value => (
+      new Promise(resolve => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          resolve(reader.result);
+        }
+        reader.readAsDataURL(value);
+      })
+    )
+  }))();
+
 export default {
 
   name: "Student",
-  dicts: ['sys_normal_disable'],
+  dicts: ['sys_normal_disable', 'sys_user_sex'],
   data: function () {
     return {
       // 遮罩层
@@ -319,13 +338,13 @@ export default {
 
       websocket: undefined,
       message:undefined,
-      id : 1,
-
+      id:1,
 
       studentForm: {},
 
-
       studentList: [],
+
+      base64ImageUrl:"",
 
       // 弹出层标题
       title: "",
@@ -352,9 +371,9 @@ export default {
         studentName: [
           {required: true, message: "学生名称不能为空", trigger: "blur"}
         ],
-        studentSex: [
-          {required: true, message: "学生性别不能为空", trigger: "blur"}
-        ],
+        // studentSex: [
+        //   {required: true, message: "学生性别不能为空", trigger: "blur"}
+        // ],
         studentAge: [
           {required: true, message: "学生年龄不能为空", trigger: "blur"}
         ],
@@ -416,32 +435,21 @@ export default {
       console.log("onmessage",event);
       this.studentList = JSON.parse(event.data);
       //this.studentList = eval(event.data);
-      console.log(this.studentList)
+      console.log(this.studentList);
       this.loading = false;
     },
 
     onerror(e) {
       console.log("onerror",e);
     },
-//监听窗口关闭事件，当窗口关闭时关闭websocket连接
-//       window.closed(){
-//         websocket.close();
-//       },
 
-//发送信息
+
+    //发送信息
     sendMessage(){
-      // this.websocket.send("{'action':'register','devSn':'SMBCSS000120220718'}");
-      // this.websocket.send("{'action':'heartbeat'}");
-      // this.websocket.send("{'action':'book_detail_info','body':'[{\"bkRfid\":\"333\"},{\"bkRfid\":\"222\"}]'}");
-      // this.websocket.send("{'action':'upload_BR_record','body':'[{\n" +
-      //   "            \"bkISBN\" : \"1234567\", \n" +
-      //   "            \"bkRfid\" : \"222\",\n" +
-      //   "            \"type\" : \"return\",\n" +
-      //   "            \"time\" : \"2022-07-22 18:31:52\",\n" +
-      //   "            \"rdName\" : \"黄海平\",\n" +
-      //   "            \"rdIdNumber\" : \"331082199999991000\"\n" +
-      //   "        }]'}");
-      this.websocket.send("{\"studentId\":2,\"studentAge\":19,\"studentClassroom\":\"2班\",\"studentMajor\":\"软件\",\"studentNumber\":\"102\",\"studentName\":\"学生2\",\"studentStatus\":\"0\",\"enrollDate\":1661097600000,\"studentCollege\":\"信息工程学院\",\"studentHobby\":\"代码\",\"studentSex\":\"男\",\"toId\":001}");
+      // this.websocket.send("{\"studentId\":2,\"studentAge\":19,\"studentClassroom\":\"2班\",\"studentMajor\":\"软件\",\"studentNumber\":\"102\",\"studentName\":\"学生2\",\"studentStatus\":\"0\",\"enrollDate\":1661097600000,\"studentCollege\":\"信息工程学院\",\"studentHobby\":\"代码\",\"studentSex\":\"男\"}");
+      // this.websocket.send("{\"studentAge\":19,\"studentClassroom\":\"2班\",\"studentMajor\":\"软件\",\"studentNumber\":\"102\",\"studentName\":\"学生4\",\"studentStatus\":\"0\",\"enrollDate\":1661097600000,\"studentCollege\":\"信息工程学院\",\"studentHobby\":\"代码\",\"studentSex\":\"男\"}");
+      // this.websocket.send(JSON.stringify(this.studentList));
+      // console.log(JSON.stringify(this.studentList));
     },
 
     //连接关闭的回调方法
@@ -476,7 +484,10 @@ export default {
     handlePictureSuccess(res, file) {
       console.log("图片上传成功后的回调",file);
       //设置图片访问路径 （articleImg 后台传过来的的上传地址）
+      // this.imageUrl = file.response.articleImg;
       this.imageUrl = file.response.articleImg;
+
+
     },
     // 文件个数超出
     handleExceed() {
@@ -542,6 +553,7 @@ export default {
         studentMajor:undefined,
         enrollDate:"",
         studentPhoto:"",
+        // studentPhotoBase64:"",
         studentHobby:undefined,
         studentStatus: "0",
       };
@@ -625,7 +637,8 @@ export default {
               // console.info("uploadImgFile",response );
               if(response.code == 200){
                 // this.form.studentFeature.photo = response.articleImg;
-                this.form.studentPhoto=response.articleImg;
+                this.form.studentPhoto = response.base64;
+                // this.form.studentPhotoBase64 = response.base64;
                 console.log(this.form);
                 this.submitData();
               }else{
@@ -652,6 +665,8 @@ export default {
             this.$modal.msgSuccess("添加成功");
             this.open = false;
             this.getList();
+            this.websocket.send(JSON.stringify(this.form));
+            console.log(JSON.stringify(this.form));
 
             this.$refs.upload.clearFiles();
           }else{
